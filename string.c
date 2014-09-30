@@ -21,7 +21,7 @@ int kmp_search(char *text, char *pattern);
 void kmp_init(char *pattern);
 int bm_search(char *text, char *pattern);
 int rabin_karp_search(char *text, char *pattern);
-unsigned long make_hash(char *string);
+unsigned long make_hash(char *string);  // もしかしたらunsigned long longじゃないときついかも
 
 int main(void) {
   char text[2048];      // 被探索文字列
@@ -47,7 +47,6 @@ int main(void) {
 
   return 0;
 }
-
 
 //-- 素朴法での探索
 int brute_force_search(char *text, char *pattern) {
