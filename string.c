@@ -4,8 +4,10 @@
 #include <time.h>
 #include <stdbool.h>
 
+#define UCHAR 256
+
 int KmpTable[1024] = { 0 };    // KMP法のテーブル
-int RkTable[1024] = { 0 };     // RK法のテーブル
+int BmTable[UCHAR] = { 0 };     // RK法のテーブル
 
 //=================================================
 // *_search関数は、テキストとパターンが引数
@@ -20,6 +22,7 @@ int brute_force_search(char *text, char *pattern);
 int kmp_search(char *text, char *pattern);
 void kmp_init(char *pattern);
 int bm_search(char *text, char *pattern);
+void bm_init(char *pattern);
 int rabin_karp_search(char *text, char *pattern);
 unsigned long make_hash(char *string);  // もしかしたらunsigned long longじゃないときついかも
 
@@ -34,8 +37,12 @@ int main(void) {
   scanf("%s", text);
   printf("%s\n", text);
 
-  //pos = brute_force_search(text, pattern);
-  pos = kmp_search(text, pattern);
+  pos = brute_force_search(text, pattern);
+  //  pos = kmp_search(text, pattern);
+
+  kmp_init(pattern); // debug
+  bm_init(pattern);  // debug
+
   if ( pos < 0 ) {
     puts("not found");
   } else {
@@ -132,7 +139,28 @@ void kmp_init(char *pattern) {
 
 //-- BM法での探索
 int bm_search(char *text, char *pattern) {
+
   return 0;
+}
+
+// BM法の作業表を作成
+void bm_init(char *pattern) {
+  int plength = strlen(pattern);
+  int i;
+
+  // 移動量の初期化(パターンの長さ)
+  for ( i = 0; i < plength; i++ ){
+    BmTable[i] = plength;
+  }
+  for ( i = 0; i < UCHAR; i++ ) {
+    BmTable[(int)pattern[i]] = plength - i - 1;
+  }
+
+  // debug
+  for ( i = 0; i < UCHAR; i++ ) {
+    printf("%-2d ", BmTable[i]);
+  }
+
 }
 
 //-- ラビン-カープ法での探索
