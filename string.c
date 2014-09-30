@@ -7,6 +7,15 @@
 int KmpTable[1024] = { 0 };    // KMP法のテーブル
 int RkTable[1024] = { 0 };     // RK法のテーブル
 
+//=================================================
+// *_search関数は、テキストとパターンが引数
+// 返却値は、出現した場所の配列添字
+//-------------------------------------------------
+// *_init関数は、照合テーブルを作成
+// それぞれのパターンを引数
+// 照合テーブルはグローバル変数として宣言
+//=================================================
+
 int brute_force_search(char *text, char *pattern);
 int kmp_search(char *text, char *pattern);
 void kmp_init(char *pattern);
@@ -39,6 +48,8 @@ int main(void) {
   return 0;
 }
 
+
+//-- 素朴法での探索
 int brute_force_search(char *text, char *pattern) {
   int plength;  // パターンの文字列
   int tlength;  // テキストの文字列
@@ -67,6 +78,7 @@ int brute_force_search(char *text, char *pattern) {
   return -1;
 }
 
+//-- KMP法での探索
 int kmp_search(char *text, char *pattern) {
   int k1, k2;
   int plength;  // パターンの文字列
@@ -119,14 +131,17 @@ void kmp_init(char *pattern) {
   puts("");
 }
 
+//-- BM法での探索
 int bm_search(char *text, char *pattern) {
   return 0;
 }
 
+//-- ラビン-カープ法での探索
 int rabin_karp_search(char *text, char *pattern) {
   return 0;
 }
 
+// ラビンカープで利用するハッシュ関数
 unsigned long make_hash(char *string) {
 
   return 0;
