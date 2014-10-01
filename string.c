@@ -36,17 +36,12 @@ int main(void) {
 
   //-- 入力処理
   scanf("%s", pattern);
-  printf("%s\n", pattern);
   scanf("%s", text);
-  printf("%s\n", text);
 
   // pos = brute_force_search(text, pattern);
   // pos = kmp_search(text, pattern);
   // pos = bm_search(text, pattern);
   pos = rk_search(text, pattern);
-
-  kmp_init(pattern); // debug
-  bm_init(pattern);  // debug
 
   if ( pos < 0 ) {
     puts("not found");
@@ -136,6 +131,7 @@ void kmp_init(uchar *pattern) {
       KmpTable[i++] = 0;
     }
   }
+  // debug
   for ( i = 0; i < strlen(pattern); i++ ) {
     printf("%-2d ", KmpTable[i]);
   }
@@ -151,6 +147,8 @@ int bm_search(uchar *text, uchar *pattern) {
 
   tlength = strlen(text);
   plength = strlen(pattern);
+
+  bm_init(pattern);
 
   // 最初の注目位置
   tpos = tlength-1;
@@ -203,9 +201,7 @@ int rk_search(uchar *text, uchar *pattern) {
 
   phash = rk_hash(pattern, strlen(pattern));
   for ( i = 0; i < tlength-plength+1; i++ ){
-    printf("%d:%c\n", i, text[i]);
     thash = rk_hash(&text[i], strlen(pattern));
-    printf("%lld, %lld\n", thash, phash);
     if ( thash == phash ) {
       return i;
     }
@@ -220,7 +216,8 @@ unsigned long long rk_hash(uchar *string, int len) {
   unsigned long long hash = 0;
 
   for ( i = 0; i < len; i++ ) {
-    hash += string[i] << 1;
+    hash <<= 1;
+    hash += string[i];
   }
 
   return hash;
