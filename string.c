@@ -26,8 +26,8 @@ int kmp_search(uchar *text, uchar *pattern);
 void kmp_init(uchar *pattern);
 int bm_search(uchar *text, uchar *pattern);
 void bm_init(uchar *pattern);
-int rabin_karp_search(uchar *text, uchar *pattern);
-unsigned long make_hash(uchar *string);  // もしかしたらunsigned long longじゃないときついかも
+int rk_search(uchar *text, uchar *pattern);
+unsigned long long make_hash(uchar *string);  // もしかしたらunsigned long longじゃないときついかも
 
 int main(void) {
   uchar text[2048];      // 被探索文字列
@@ -193,12 +193,12 @@ void bm_init(uchar *pattern) {
 }
 
 //-- ラビン-カープ法での探索
-int rabin_karp_search(uchar *text, uchar *pattern) {
+int rk_search(uchar *text, uchar *pattern) {
   return 0;
 }
 
 // ラビンカープで利用するハッシュ関数
-unsigned long make_hash(uchar *string) {
+unsigned long long rk_hash(uchar *string) {
 
   return 0;
 }
