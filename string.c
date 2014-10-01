@@ -40,8 +40,9 @@ int main(void) {
   scanf("%s", text);
   printf("%s\n", text);
 
-  pos = brute_force_search(text, pattern);
-  //  pos = kmp_search(text, pattern);
+  // pos = brute_force_search(text, pattern);
+  // pos = kmp_search(text, pattern);
+  pos = bm_search(text, pattern);
 
   kmp_init(pattern); // debug
   bm_init(pattern);  // debug
@@ -142,8 +143,33 @@ void kmp_init(uchar *pattern) {
 
 //-- BM法での探索
 int bm_search(uchar *text, uchar *pattern) {
+  int tpos;
+  int ppos;
+  int tlength;
+  int plength;
 
-  return 0;
+  tlength = strlen(text);
+  plength = strlen(pattern);
+
+  // 最初の注目位置
+  tpos = tlength-1;
+
+  while ( (tpos < tlength) && (ppos < plength )) {
+    ppos = plength-1;   //  パターンの中もう位置をセット
+    while (  ppos >= 0 ) {
+      if ( text[tpos] != pattern[ppos] ) {
+        tpos += BmTable[text[tpos]];
+      } else {
+        tpos--;
+        ppos--;
+      }
+    }
+    if ( ppos < 0 ) {
+      return tpos+plength;
+    }
+  }
+
+  return -1;
 }
 
 // BM法の作業表を作成
