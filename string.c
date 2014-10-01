@@ -27,12 +27,13 @@ void kmp_init(uchar *pattern);
 int bm_search(uchar *text, uchar *pattern);
 void bm_init(uchar *pattern);
 int rk_search(uchar *text, uchar *pattern);
-unsigned long long make_hash(uchar *string);  // もしかしたらunsigned long longじゃないときついかも
+unsigned long long rk_hash(uchar *string, int len);  // もしかしたらunsigned long longじゃないときついかも
 
 int main(void) {
   uchar text[2048];      // 被探索文字列
   uchar pattern[128];   // 探索文字列
   int pos;             // 発見位置
+  unsigned long long rk_pos;
 
   //-- 入力処理
   scanf("%s", pattern);
@@ -42,7 +43,8 @@ int main(void) {
 
   // pos = brute_force_search(text, pattern);
   // pos = kmp_search(text, pattern);
-  pos = bm_search(text, pattern);
+  // pos = bm_search(text, pattern);
+  rk_pos = rk_search(text, pattern);
 
   kmp_init(pattern); // debug
   bm_init(pattern);  // debug
@@ -194,11 +196,19 @@ void bm_init(uchar *pattern) {
 
 //-- ラビン-カープ法での探索
 int rk_search(uchar *text, uchar *pattern) {
+
   return 0;
 }
 
 // ラビンカープで利用するハッシュ関数
-unsigned long long rk_hash(uchar *string) {
+unsigned long long rk_hash(uchar *string, int len) {
+  int i;  // 反復変数
+  unsigned long long hash = 0;
 
-  return 0;
+  for ( i = 0; i < len; i++ ) {
+    hash += string[i] << 1;
+    printf("%lld\n", hash);
+  }
+
+  return hash;
 }
