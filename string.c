@@ -4,10 +4,13 @@
 #include <time.h>
 #include <stdbool.h>
 
-#define UCHAR 256
+#define CNUM 256
+
+typedef unsigned char uchar;
+
 
 int KmpTable[1024] = { 0 };    // KMP法のテーブル
-int BmTable[UCHAR] = { 0 };     // RK法のテーブル
+int BmTable[CNUM] = { 0 };     // RK法のテーブル
 
 //=================================================
 // *_search関数は、テキストとパターンが引数
@@ -18,17 +21,17 @@ int BmTable[UCHAR] = { 0 };     // RK法のテーブル
 // 照合テーブルはグローバル変数として宣言
 //=================================================
 
-int brute_force_search(char *text, char *pattern);
-int kmp_search(char *text, char *pattern);
-void kmp_init(char *pattern);
-int bm_search(char *text, char *pattern);
-void bm_init(char *pattern);
-int rabin_karp_search(char *text, char *pattern);
-unsigned long make_hash(char *string);  // もしかしたらunsigned long longじゃないときついかも
+int brute_force_search(uchar *text, uchar *pattern);
+int kmp_search(uchar *text, uchar *pattern);
+void kmp_init(uchar *pattern);
+int bm_search(uchar *text, uchar *pattern);
+void bm_init(uchar *pattern);
+int rabin_karp_search(uchar *text, uchar *pattern);
+unsigned long make_hash(uchar *string);  // もしかしたらunsigned long longじゃないときついかも
 
 int main(void) {
-  char text[2048];      // 被探索文字列
-  char pattern[128];   // 探索文字列
+  uchar text[2048];      // 被探索文字列
+  uchar pattern[128];   // 探索文字列
   int pos;             // 発見位置
 
   //-- 入力処理
@@ -56,7 +59,7 @@ int main(void) {
 }
 
 //-- 素朴法での探索
-int brute_force_search(char *text, char *pattern) {
+int brute_force_search(uchar *text, uchar *pattern) {
   int plength;  // パターンの文字列
   int tlength;  // テキストの文字列
   int pos;      // 探索の現在地
@@ -85,7 +88,7 @@ int brute_force_search(char *text, char *pattern) {
 }
 
 //-- KMP法での探索
-int kmp_search(char *text, char *pattern) {
+int kmp_search(uchar *text, uchar *pattern) {
   int k1, k2;
   int plength;  // パターンの文字列
   int tlength;  // テキストの文字列
@@ -116,7 +119,7 @@ int kmp_search(char *text, char *pattern) {
 }
 
 // KMP法の作業表を作成
-void kmp_init(char *pattern) {
+void kmp_init(uchar *pattern) {
   int i = 2;
   int j = 0;
   KmpTable[0] = -1;
@@ -138,38 +141,38 @@ void kmp_init(char *pattern) {
 }
 
 //-- BM法での探索
-int bm_search(char *text, char *pattern) {
+int bm_search(uchar *text, uchar *pattern) {
 
   return 0;
 }
 
 // BM法の作業表を作成
-void bm_init(char *pattern) {
+void bm_init(uchar *pattern) {
   int plength = strlen(pattern);
   int i;
 
   // 移動量の初期化(パターンの長さ)
-  for ( i = 0; i < plength; i++ ){
+  for ( i = 0; i < CNUM; i++ ){
     BmTable[i] = plength;
   }
-  for ( i = 0; i < UCHAR; i++ ) {
-    BmTable[(int)pattern[i]] = plength - i - 1;
+  for ( i = 0; i < plength-1; i++ ) {
+    BmTable[pattern[i]] = plength - i - 1;
   }
 
   // debug
-  for ( i = 0; i < UCHAR; i++ ) {
+  for ( i = 0; i < CNUM; i++ ) {
     printf("%-2d ", BmTable[i]);
   }
 
 }
 
 //-- ラビン-カープ法での探索
-int rabin_karp_search(char *text, char *pattern) {
+int rabin_karp_search(uchar *text, uchar *pattern) {
   return 0;
 }
 
 // ラビンカープで利用するハッシュ関数
-unsigned long make_hash(char *string) {
+unsigned long make_hash(uchar *string) {
 
   return 0;
 }
