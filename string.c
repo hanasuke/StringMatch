@@ -8,7 +8,6 @@
 
 typedef unsigned char uchar;
 
-
 int KmpTable[1024] = { 0 };    // KMP法のテーブル
 int BmTable[CNUM] = { 0 };     // RK法のテーブル
 
@@ -28,6 +27,7 @@ int bm_search(uchar *text, uchar *pattern);
 void bm_init(uchar *pattern);
 int rk_search(uchar *text, uchar *pattern);
 unsigned long long rk_hash(uchar *string, int len);  // もしかしたらunsigned long longじゃないときついかも
+unsigned long long rk_rhash(uchar *string, int len);
 
 int main(void) {
   uchar text[2048];      // 被探索文字列
@@ -214,6 +214,20 @@ int rk_search(uchar *text, uchar *pattern) {
 unsigned long long rk_hash(uchar *string, int len) {
   int i;  // 反復変数
   unsigned long long hash = 0;
+
+  for ( i = 0; i < len; i++ ) {
+    hash <<= 1;
+    hash += string[i];
+  }
+
+  return hash;
+}
+
+// ラビンカープで利用するローリングハッシュ関数
+unsigned long long rk_rhash(uchar *string, int len, unsigned long long hash) {
+  int i=0;  // 反復変数
+
+  hash -= (string[i-1] << len);
 
   for ( i = 0; i < len; i++ ) {
     hash <<= 1;
