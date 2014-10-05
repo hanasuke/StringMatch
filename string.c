@@ -80,7 +80,6 @@ int brute_force_search(uchar *text, uchar *pattern) {
       return k1;
     }
   }
-
   return -1;
 }
 
@@ -131,11 +130,6 @@ void kmp_init(uchar *pattern) {
       KmpTable[i++] = 0;
     }
   }
-  // debug
-  for ( i = 0; i < strlen(pattern); i++ ) {
-    printf("%-2d ", KmpTable[i]);
-  }
-  puts("");
 }
 
 //-- BM法での探索
@@ -167,7 +161,6 @@ int bm_search(uchar *text, uchar *pattern) {
       return tpos+plength;
     }
   }
-
   return -1;
 }
 
@@ -183,12 +176,6 @@ void bm_init(uchar *pattern) {
   for ( i = 0; i < plength-1; i++ ) {
     BmTable[pattern[i]] = plength - i - 1;
   }
-
-  // debug
-  for ( i = 0; i < CNUM; i++ ) {
-    printf("%-2d ", BmTable[i]);
-  }
-
 }
 
 //-- ラビン-カープ法での探索
@@ -212,7 +199,6 @@ int rk_search(uchar *text, uchar *pattern) {
       return i;
     }
   }
-
   return -1;
 }
 
@@ -225,7 +211,6 @@ unsigned long long rk_hash(uchar *string, int len) {
     hash <<= 2;
     hash += string[i];
   }
-
   return hash;
 }
 
