@@ -222,7 +222,7 @@ unsigned long long rk_hash(uchar *string, int len) {
   unsigned long long hash = 0;
 
   for ( i = 0; i < len; i++ ) {
-    hash <<= 1;
+    hash <<= 2;
     hash += string[i];
   }
 
@@ -231,15 +231,10 @@ unsigned long long rk_hash(uchar *string, int len) {
 
 // ラビンカープで利用するローリングハッシュ関数
 unsigned long long rk_rhash(uchar *string, int len, unsigned long long hash) {
-  int i=0;  // 反復変数
+  hash -= (string[-1] << (len-1)*2);
 
-  hash -= (string[-1] << len-1);
-  printf("%c %c %c \n", string[i-1], string[i], string[len-1]);
-
-  hash <<= 1;
+  hash <<= 2;
   hash += string[len-1];
-
-  printf("%d, %d\n", i, len);
 
   return hash;
 }
