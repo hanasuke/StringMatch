@@ -49,9 +49,6 @@ int main(void) {
     printf("found at %d\n", pos);
   }
 
-  printf("pattern: %s\n", pattern);
-  printf("text   : %-20s\n", text);
-
   return 0;
 }
 
@@ -61,6 +58,8 @@ int brute_force_search(uchar *text, uchar *pattern) {
   int tlength;  // テキストの文字列
   int pos;      // 探索の現在地
   int k1, k2;
+  int cmp = 0;
+  int rep = 0;
 
   plength = strlen(pattern);
   tlength = strlen(text);
@@ -68,8 +67,11 @@ int brute_force_search(uchar *text, uchar *pattern) {
   printf("%d %d\n", plength, tlength);
 
   for ( k1 = 0; k1 < tlength; k1++ ) {
+    rep++;
     pos = k1;
     for ( k2 = 0; k2 < plength; k2++ ) {
+      rep++;
+      cmp++;
       if ( text[pos] != pattern[k2] ) {
         break;
       } else {
@@ -77,6 +79,7 @@ int brute_force_search(uchar *text, uchar *pattern) {
       }
     }
     if ( k2 == plength ) {  // 文字列が発見された場合
+      printf("%d,%d,%d\n", tlength, cmp, rep);
       return k1;
     }
   }
@@ -89,6 +92,8 @@ int kmp_search(uchar *text, uchar *pattern) {
   int plength;  // パターンの文字列
   int tlength;  // テキストの文字列
   int pos;      // 探索の現在地
+  int cmp = 0;
+  int rep = 0;
 
   k1 = 0;
   k2 = 0;
@@ -99,15 +104,20 @@ int kmp_search(uchar *text, uchar *pattern) {
   tlength = strlen(text);
 
   while ( k1 < tlength && k2 < plength ) {
+    rep++;
     if ( text[k1] == pattern[k2] ) {
+      cmp++;
       if ( ! pattern[k2+1] ) {
+        printf("%d,%d,%d\n", tlength, cmp, rep);
         return k1-k2;
       }
       k1++;
       k2++;
     } else if ( k2 > 0 ) {
+      cmp++;
       k2 = k2 - KmpTable[k2];
     } else {
+      cmp++;
       k1++;
     }
   }
@@ -138,6 +148,8 @@ int bm_search(uchar *text, uchar *pattern) {
   int ppos;
   int tlength;
   int plength;
+  int cmp = 0;
+  int rep = 0;
 
   tlength = strlen(text);
   plength = strlen(pattern);
@@ -148,16 +160,21 @@ int bm_search(uchar *text, uchar *pattern) {
   tpos = tlength-1;
 
   while ( (tpos < tlength) && (ppos < plength )) {
+    rep++;
     ppos = plength-1;   //  パターンの中もう位置をセット
     while (  ppos >= 0 ) {
+      rep++;
       if ( text[tpos] != pattern[ppos] ) {
+        cmp++;
         tpos += BmTable[text[tpos]];
       } else {
+        cmp++;
         tpos--;
         ppos--;
       }
     }
     if ( ppos < 0 ) {
+      printf("%d,%d,%d\n", tlength, cmp, rep);
       return tpos+plength;
     }
   }
@@ -185,10 +202,12 @@ int rk_search(uchar *text, uchar *pattern) {
   unsigned long long thash;
   unsigned long long phash;
   int i;
+  int cmp = 0;
+  int rep = 0;
 
   phash = rk_hash(pattern, strlen(pattern));
   for ( i = 0; i < tlength-plength+1; i++ ){
-
+    rep++;
     if ( ! i ) {
       thash = rk_hash(&text[i], plength);
     } else {
@@ -196,6 +215,8 @@ int rk_search(uchar *text, uchar *pattern) {
     }
 
     if ( thash == phash ) {
+      cmp++;
+      printf("%d,%d,%d\n", tlength, cmp, rep);
       return i;
     }
   }
