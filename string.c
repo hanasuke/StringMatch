@@ -8,8 +8,8 @@
 
 typedef unsigned char uchar;
 
-int KmpTable[1024] = { 0 };    // KMP法のテーブル
-int BmTable[CNUM] = { 0 };     // RK法のテーブル
+int KmpTable[100000] = { 0 };    // KMP法のテーブル
+int BmTable[CNUM] = { 0 };     // BM法のテーブル
 
 //=================================================
 // *_search関数は、テキストとパターンが引数
@@ -30,7 +30,7 @@ unsigned long long rk_hash(uchar *string, int len);  // もしかしたらunsign
 unsigned long long rk_rhash(uchar *string, int len, unsigned long long hash);
 
 int main(void) {
-  uchar text[2048];      // 被探索文字列
+  uchar text[10000];      // 被探索文字列
   uchar pattern[128];   // 探索文字列
   int pos;             // 発見位置
 
@@ -83,6 +83,7 @@ int brute_force_search(uchar *text, uchar *pattern) {
       return k1;
     }
   }
+  printf("%d,%d,%d\n", tlength, cmp, rep);
   return -1;
 }
 
@@ -157,18 +158,17 @@ int bm_search(uchar *text, uchar *pattern) {
   bm_init(pattern);
 
   // 最初の注目位置
-  tpos = tlength-1;
+  tpos = plength-1;
 
   while ( (tpos < tlength) && (ppos < plength )) {
     rep++;
     ppos = plength-1;   //  パターンの中もう位置をセット
     while (  ppos >= 0 ) {
       rep++;
+      cmp++;
       if ( text[tpos] != pattern[ppos] ) {
-        cmp++;
         tpos += BmTable[text[tpos]];
       } else {
-        cmp++;
         tpos--;
         ppos--;
       }
@@ -178,6 +178,7 @@ int bm_search(uchar *text, uchar *pattern) {
       return tpos+plength;
     }
   }
+  printf("%d,%d,%d\n", tlength, cmp, rep);
   return -1;
 }
 
@@ -214,12 +215,13 @@ int rk_search(uchar *text, uchar *pattern) {
       thash = rk_rhash(&text[i], plength, thash);
     }
 
+    cmp++;
     if ( thash == phash ) {
-      cmp++;
       printf("%d,%d,%d\n", tlength, cmp, rep);
       return i;
     }
   }
+  printf("%d,%d,%d\n", tlength, cmp, rep);
   return -1;
 }
 
